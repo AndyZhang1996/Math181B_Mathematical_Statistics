@@ -1,0 +1,214 @@
+---
+title: "R Tutorial"
+output: html_notebook
+---
+
+This is a tutorial to the R language. Basics of it will be shown in the following notebook.
+
+
+What is R?
+
+R is an open source software environment to do statistical computation. It has it's own programming language, but it's very simple and easy to code(to some extent). There are useful builtin functions and loads of packages for all kinds of tasks, and it's grammerly friendly.
+
+For this course we will use the R environment, but it's recommended that rather than use the R software, we use the customized IDE Rstudio, because it's more powerful.
+
+Environment Setup
+-Goto www.rstudio.com
+-We need to install the R environment first. Click download to redirect to download page. In the description it gives the instruction to install the R environment. Follow the instruction according to your OS, download the installer and install R. (Fairly easy except for Linux.) Then download&install Rstudio.
+-another route: install anaconda. www.anaconda.org/
+
+Rstudio Interface/functionality
+Interface:
+Script area; console; Environment; ...
+
+Set work directory: setwd() or click a button.
+There are packages of different functionalities written by other people which you can load and use without writing them by yourself.
+Load packages: either use functions or click buttons.
+other functionalities of Rstudio: R markdown/R Sweave..
+
+
+R language:
+
+R can store different types of information. For example:
+Numerical Value:
+```{r}
+a=102
+#a is actually a vector and I can actually do vector operations on a. (different than python). R can be vague in data type(also convenient). It will automatically change the object type according to your operations.
+#e.g.: I can access a by a[1]. I can check it's length by length(a). If you do this in python you'll get an error.
+print(a)
+typeof(a) #R automatically uses double to store values.
+a=as.integer(a) #change the type of a. (mode(a)="integer")
+typeof(a)
+
+#The two most common numeric classes used in R are integer and double (for double precision floating point numbers). R automatically converts between these two classes when needed for mathematical purposes. As a result, it's feasible to use R and perform analyses for years without specifying these differences.
+```
+
+
+
+Strings:
+```{r}
+b="103" #use quotation mark to indicate string
+print(b)
+typeof(b)
+b=as.numeric(b)
+print(b)
+```
+
+Boolean:
+```{r}
+c=TRUE
+print(c)
+print(!c)
+typeof(c)
+```
+Categorical:
+```{r}
+d=factor(c(1.1,2.2))
+print(d)
+typeof(d)
+class(d)
+```
+
+Special types:
+```{r}
+e=NaN#impossible values
+typeof(e)
+f=NA#missing values
+typeof(f)
+g=NULL
+typeof(g)
+```
+
+
+Data structures:
+vector:
+
+```{r}
+v=c(1,2,3,4,5,6,7,8,9)
+v=1:9
+v
+v[1]#Indexing in R starts at 1 instead of 0.
+length(v)
+#concatenate vectors:
+c(v,10)
+vv=c(c(1 ,2,3),c("Bob","Jack","Mary"))#when concatenating different types of vectors, the data type will change, so be careful.
+print(vv)
+```
+Matrix
+
+```{r}
+M=matrix(c(1:8,8),3,3)
+M
+dim(M)#shape of M
+M[3,3]#access an element of M
+
+```
+
+Data Frame:
+In a Dataframe, we have a matrix of useful information, where each row represents a different sample, and each column represents different attributes within a sample.
+
+```{r}
+hh=as.data.frame(matrix(vv,3,2),col.names=c("ID","Gender"))
+colnames(hh)=c("ID","name")
+hh
+```
+
+Creating sequence of data using different functions.
+```{r}
+seq(1,100,2)#series with fixed increments.
+rep(1,100)#repetition of numbers
+
+rnorm(100)#random sample generation.
+rnorm(100,0,2)
+#since the generating process is random, if we run the following command twice, we'll get two different sequence of data.
+rnorm(10)
+rnorm(10)
+
+#However, by setting seed to a fixed number, you'll get exact same output even when you want to generate random data.(This is useful for checking correctness of your program. For example, we can provide the output from a certain seed and you can set seed to that specific number and check if your output matches the correct one.)
+set.seed(1)
+rnorm(10)
+set.seed(1)
+rnorm(10)
+```
+
+Basic calculations:
++,-,*,/,sqrt,^2,%*%,t(),det(),solve()....
+
+
+
+Objects:
+Everything is an object in R. For example, many functions output objects as return.(function itself is also an object)
+
+When we do linear regression:
+```{r}
+x=seq(1,10,2)
+y=2*x+3
+plot.new()
+plot(x,y,pch=".")
+lines(x,y)
+LM=lm(y~x) #LM is an object
+LM$coefficients
+##plot(LM)
+```
+When we do time series analysis:
+```{r}
+t=c(1,3,2,5,2,2,5,1,5)
+T=ts(t)#T is a time series object.
+plot(T)
+```
+
+
+Plotting:
+the plot() function does most of the job. Typically, you can perform plotting the graph of sequence of data x and it's related response y through plot(x,y). This will return the plot with all points (x_i, y_i). If you want to draw the graph of it, you can use the lines(x,y) function to get a graph. There are many attributes in plot/lines: xlab, ylab, main, xlim,ylim,pch, cex, col,..etc. For details you can look up r documentation of plot by typing "?plot" in the console.
+
+the plot function can also take in an object and plot the pre-designed plot w.r.t that object. For example, when we have a regression object, plotting it will give several technical graphs that describes the wellness of the regression. If we plot a time series object, it will plot the path of the time series.
+
+What if you want to plot several different graphs and arrange them in a good manner? Use the par() function to partition the current graphic frame into several cells and plot graphs within each cell.
+
+```{r}
+x = seq(0.1,2*pi,0.1)
+par(mfrow=c(2,2))
+plot(x,x,pch=".")
+plot(x,x^2,pch=".")
+plot(x,sin(x),pch=".")
+plot(x,log(x),pch=".")
+```
+
+
+I/O of data:
+
+1.read/write function:
+read.table/read.csv/...
+or simply read the file then do later tasks: file("")
+or, "scan()"
+
+write data into file:
+write/write.table/write.csv
+2. load packages that contain data. e.g. the 'cars' dataset and 'iris'dataset
+
+
+Write customized function:
+
+Grammer: functionname=function(attributes){
+  type in your own functionality in here.
+
+}
+```{r}
+addition=function(x,y){
+  return(x+y)
+}
+```
+
+```{r}
+#another example(useless)
+rec=function(a){#find the maximum in a in a recursive way
+  if(length(a)==1){
+    return (a)
+  }
+  else{
+    return(max(a[1],rec(a[c(2:length(a))])))
+  }
+}
+```
+
+
